@@ -21,7 +21,7 @@ var expect = Code.expect;
 
 var plugin = require('../');
 
-describe('hapi-plugin', function () {
+describe('elasticauth-api', function () {
 
   it('should not return error', function (done) {
 
