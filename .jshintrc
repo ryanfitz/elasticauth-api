@@ -21,8 +21,6 @@
   "expr": true,
   "globals": { },
   "predef": [
-    "before",
-    "beforeEach",
     "after",
     "afterEach"
   ]

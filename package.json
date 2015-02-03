@@ -14,13 +14,19 @@
     "node": ">=0.10.32"
   },
   "dependencies": {
-    "async" : "0.9.x",
+    "async": "0.9.x",
+    "aws-sdk": "2.x.x",
     "boom": "2.x.x",
     "bunyan": "1.x.x",
+    "cryptiles": "2.x.x",
+    "hapi-auth-jwt": "2.x.x",
     "hoek": "2.x.x",
     "joi": "5.x.x",
+    "jsonwebtoken": "3.x.x",
     "lodash": "3.x.x",
-    "vogels": "2.0.0-rc6"
+    "omit-empty": "^0.3.0",
+    "uuid": "2.x.x",
+    "vogels": "2.0.0-rc7"
   },
   "peerDependencies": {
     "hapi": ">=8.x.x"

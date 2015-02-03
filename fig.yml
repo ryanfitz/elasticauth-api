@@ -1,15 +1,18 @@
 
 server:
   build: .
-  command: make
+  command: make example
   volumes:
     - .:/app
   links:
     - db:dynamodb-local
+  ports:
+   - "8080:8080"
   environment:
     AWS_ACCESS_KEY_ID: AKID
     AWS_SECRET_ACCESS_KEY: SECRET
     AWS_REGION: us-east-1
+    DYNAMODB_ENDPOINT: http://dynamodb-local:8000
 db:
   image: fitz/dynamodb-local
   command: -inMemory
