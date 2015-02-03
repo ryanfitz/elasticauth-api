@@ -1,0 +1,14 @@
+{
+  "name": "elasticAuthApiExample",
+  "version": "0.0.0",
+  "description": "example elastic auth api server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "8.x.x"
+  }
+}

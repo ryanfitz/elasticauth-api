@@ -1,0 +1,44 @@
+{
+  "name": "elasticauth-api",
+  "description": "Elastic Auth Api",
+  "version": "1.0.0",
+  "repository": "git://github.com/ryanfitz/elasticauth-api",
+  "main": "index",
+  "keywords": [
+    "hapi",
+    "plugin",
+    "auth",
+    "AWS"
+  ],
+  "engines": {
+    "node": ">=0.10.32"
+  },
+  "dependencies": {
+    "async" : "0.9.x",
+    "boom": "2.x.x",
+    "bunyan": "1.x.x",
+    "hoek": "2.x.x",
+    "joi": "5.x.x",
+    "lodash": "3.x.x",
+    "vogels": "2.0.0-rc6"
+  },
+  "peerDependencies": {
+    "hapi": ">=8.x.x"
+  },
+  "devDependencies": {
+    "code": "1.x.x",
+    "hapi": "8.x.x",
+    "lab": "5.x.x",
+    "jshint": "2.x.x",
+    "jshint-stylish": "1.x.x"
+  },
+  "scripts": {
+    "test": "make test-cov"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "http://github.com/ryanfitz/elasticauth-api/raw/master/LICENSE"
+    }
+  ]
+}
