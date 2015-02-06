@@ -4,6 +4,7 @@
 
 var Code             = require('code'),
     Lab              = require('lab'),
+    _                = require('lodash'),
     vogels           = require('vogels'),
     helper           = require('./test-helper'),
     Account          = require('../lib/models/account'),
@@ -160,6 +161,67 @@ describe('Account Manager', { timeout: 10000 }, function () {
       });
 
     });
+  });
+
+  describe('#find', function () {
+    var accountId;
+
+    before(function (done) {
+      var d = {email : helper.randomEmail(), username : helper.randomUsername()};
+      manager.create(d, function (err, acc) {
+        expect(err).to.not.exist();
+        accountId = acc.id;
+
+        return done();
+      });
+    });
+
+
+    it('should return single account with id', function (done) {
+
+      manager.find({id : accountId}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.be.a.string();
+        expect(acc.username).to.be.a.string();
+        expect(acc.email).to.not.exist();
+
+        return done();
+      });
+
+    });
+
+    it('should return account with all attributes', function (done) {
+
+      manager.find({id : accountId}, {allFields : true}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.be.a.string();
+        expect(acc.username).to.be.a.string();
+        expect(acc.email).to.be.a.string();
+        expect(acc.createdAt).to.be.a.string();
+
+        return done();
+      });
+
+    });
+
+    it('should return empty set', function (done) {
+
+      manager.find({id : '9999999999999'}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(0);
+
+        return done();
+      });
+
+    });
+
+
   });
 
 });

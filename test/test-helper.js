@@ -21,3 +21,7 @@ exports.randomEmail = function () {
 exports.randomUsername = function () {
   return cryptiles.randomString(12);
 };
+
+exports.authHeader = function (token) {
+  return {authorization : 'Bearer ' + token.access};
+};

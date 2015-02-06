@@ -54,7 +54,7 @@ describe('tokens', function () {
         }]
       };
 
-      expect(resp).to.deep.equal(expected);
+      expect(expected).to.deep.equal(resp);
       return done();
     });
 
@@ -95,7 +95,7 @@ describe('tokens', function () {
         }]
       };
 
-      expect(resp).to.deep.equal(expected);
+      expect(expected).to.deep.equal(resp);
       return done();
     });
 
@@ -114,7 +114,7 @@ describe('tokens', function () {
         id : '12345',
         username : 'testdude',
         email : 'test@test.com',
-        created : created,
+        createdAt : created,
       };
 
       var opts = {
@@ -139,7 +139,7 @@ describe('tokens', function () {
             href: 'http://test.com/accounts/12345',
             username : 'testdude',
             email : 'test@test.com',
-            created : created.toISOString()
+            createdAt : created.toISOString()
           }]
         }
       };
@@ -159,7 +159,7 @@ describe('tokens', function () {
         id : '12345',
         username : 'testdude',
         email : 'test@test.com',
-        created : created,
+        createdAt : created,
       };
 
       var currentPath = url.parse('http://test.com/accounts');
@@ -172,11 +172,11 @@ describe('tokens', function () {
           href: 'http://test.com/accounts/12345',
           username : 'testdude',
           email : 'test@test.com',
-          created : created.toISOString()
+          createdAt : created.toISOString()
         }]
       };
 
-      expect(resp).to.deep.equal(expected);
+      expect(expected).to.deep.equal(resp);
       return done();
     });
 
@@ -188,8 +188,8 @@ describe('tokens', function () {
         id : '12345',
         username : 'testdude',
         email : 'test@test.com',
-        created : created,
-        updated : updated
+        createdAt : created,
+        updatedAt : updated
       };
 
       var currentPath = url.parse('http://test.com/accounts');
@@ -202,12 +202,12 @@ describe('tokens', function () {
           href: 'http://test.com/accounts/12345',
           username : 'testdude',
           email : 'test@test.com',
-          created : created.toISOString(),
-          updated : updated.toISOString()
+          createdAt : created.toISOString(),
+          updatedAt : updated.toISOString()
         }]
       };
 
-      expect(resp).to.deep.equal(expected);
+      expect(expected).to.deep.equal(resp);
       return done();
     });
 
@@ -219,14 +219,14 @@ describe('tokens', function () {
         id : '12345',
         username : 'testdude',
         email : 'test@test.com',
-        created : c1,
+        createdAt : c1,
       };
 
       var acc2 = {
         id : '9876',
         username : 'anotherdude',
         email : 'test2@test.com',
-        created : c2,
+        createdAt : c2,
       };
 
       var currentPath = url.parse('http://test.com/accounts');
@@ -239,17 +239,17 @@ describe('tokens', function () {
           href: 'http://test.com/accounts/12345',
           username : 'testdude',
           email : 'test@test.com',
-          created : c1.toISOString()
+          createdAt : c1.toISOString()
         }, {
           id : '9876',
           href: 'http://test.com/accounts/9876',
           username : 'anotherdude',
           email : 'test2@test.com',
-          created : c2.toISOString()
+          createdAt : c2.toISOString()
         }]
       };
 
-      expect(resp).to.deep.equal(expected);
+      expect(expected).to.deep.equal(resp);
       return done();
     });
 
@@ -261,7 +261,7 @@ describe('tokens', function () {
         id : '12345',
         username : 'testdude',
         email : 'test@test.com',
-        created : created,
+        createdAt : created,
       };
 
       var token = {
@@ -286,7 +286,7 @@ describe('tokens', function () {
           href: 'http://test.com/accounts/12345',
           username : 'testdude',
           email : 'test@test.com',
-          created : created.toISOString()
+          createdAt : created.toISOString()
         }],
         linked : {
           tokens : [{
@@ -299,7 +299,7 @@ describe('tokens', function () {
         }
       };
 
-      expect(resp).to.deep.equal(expected);
+      expect(expected).to.deep.equal(resp);
       return done();
     });
 
