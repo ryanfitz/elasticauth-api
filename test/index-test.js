@@ -31,7 +31,6 @@ describe('elasticauth-api', function () {
       register : plugin,
       options : { key : '123456'}
     }, function (err) {
-
       expect(err).to.not.exist();
 
       return done();

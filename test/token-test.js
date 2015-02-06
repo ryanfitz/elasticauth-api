@@ -56,7 +56,32 @@ describe('tokens', function () {
 
   describe('#verify', function () {
 
-    it('should return decoded access token', function (done) {
+    it('should return decoded access token with accesstoken scopes', function (done) {
+
+      var acc = {
+        id : '123456',
+        email : helper.randomEmail(),
+        username : helper.randomUsername(),
+        name : 'testuser'
+      };
+
+      token.create(acc, function (err, result) {
+        expect(err).to.not.exist();
+
+        token.verify(result.accessToken, function (err, decoded) {
+          expect(err).to.not.exist();
+          expect(decoded).to.exist();
+
+          expect(decoded.user).to.equal('123456');
+          expect(decoded.name).to.equal('testuser');
+          expect(decoded.scope).to.deep.equal(['accesstoken']);
+          return done();
+        });
+
+      });
+    });
+
+    it('should return decoded access token with multiple scopes', function (done) {
 
       var acc = {
         id : '123456',
@@ -75,13 +100,12 @@ describe('tokens', function () {
 
           expect(decoded.user).to.equal('123456');
           expect(decoded.name).to.equal('testuser');
-          expect(decoded.scope).to.deep.equal(['user']);
+          expect(decoded.scope).to.deep.equal(['user', 'accesstoken']);
           return done();
         });
 
       });
     });
-
 
     it('should return decoded refresh token', function (done) {
 

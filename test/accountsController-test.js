@@ -166,6 +166,17 @@ describe('Accounts Controller', function () {
 
     });
 
+    it('should return error when attempting to use refresh token', function (done) {
+
+      var request = { method: 'GET', url: '/accounts/' + accountId, headers : helper.authHeader(token, 'refresh') };
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(403);
+        expect(res.result.accounts).to.not.exist();
+
+        return done();
+      });
+    });
 
   });
 
