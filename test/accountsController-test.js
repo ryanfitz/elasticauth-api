@@ -3,10 +3,8 @@
 // Load modules
 
 var Code   = require('code'),
-    Hapi   = require('hapi'),
     Lab    = require('lab'),
     _      = require('lodash'),
-    vogels = require('vogels'),
     helper = require('./test-helper');
 
 // Declare internals
@@ -21,29 +19,11 @@ var it = lab.it;
 var before = lab.before;
 var expect = Code.expect;
 
-var plugin = require('../');
-
 describe('Accounts Controller', function () {
-  var server = new Hapi.Server();
-  server.connection();
+  var server;
 
   before(function (done) {
-    var driver = helper.localDynamoDB();
-    vogels.dynamoDriver(driver);
-
-    var options = {
-      log : helper.testLogger(),
-      key : 'BbZijuoXAdr85UzyijKARZimKfrSmQ6fv8kZ7OFfc'
-    };
-
-    server.register( {
-      register : plugin,
-      options : options
-    }, function (err) {
-      expect(err).to.not.exist();
-
-      return done();
-    });
+    server = helper.testApiServer(done);
   });
 
   describe('POST /accounts', function () {
@@ -100,22 +80,15 @@ describe('Accounts Controller', function () {
         token;
 
     before(function (done) {
-      var data = {
-        email : helper.randomEmail(),
-        username : helper.randomUsername()
-      };
+      server.methods.createAccount(function (err, data) {
+        expect(err).to.not.exist();
+        expect(data).to.exist();
+        expect(data.account).to.exist();
 
-      var request = { method: 'POST', url: '/accounts', payload : data};
-
-      server.inject(request, function (res) {
-        expect(res.statusCode).to.equal(201);
-        var account = _.first(res.result.accounts);
-
-        token = _.first(res.result.linked.tokens);
-
-        expect(account).to.exist();
+        token = data.token;
         expect(token).to.exist();
-        accountId = account.id;
+
+        accountId = data.account.id;
 
         return done();
       });
@@ -180,5 +153,41 @@ describe('Accounts Controller', function () {
 
   });
 
+  describe('GET /accounts', function () {
+    var accountId,
+        token;
+
+    before(function (done) {
+      var data = {
+        email : helper.randomEmail(),
+        username : helper.randomUsername()
+      };
+
+      var request = { method: 'POST', url: '/accounts', payload : data};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(201);
+        var account = _.first(res.result.accounts);
+
+        token = _.first(res.result.linked.tokens);
+
+        expect(account).to.exist();
+        expect(token).to.exist();
+        accountId = account.id;
+
+        return done();
+      });
+    });
+
+    //it('should return account matching email address', function (done) {
+      //var request = { method: 'GET', url: '/accounts/' + accountId};
+
+      //server.inject(request, function (res) {
+        //expect(res.statusCode).to.equal(200);
+
+        //return done();
+      //});
+    //});
+  });
 
 });

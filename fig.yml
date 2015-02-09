@@ -3,7 +3,7 @@ server:
   build: .
   command: make example
   volumes:
-    - .:/app
+    - .:/usr/src/app
   links:
     - db:dynamodb-local
   ports:
