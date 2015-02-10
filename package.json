@@ -39,7 +39,7 @@
     "jshint-stylish": "1.x.x"
   },
   "scripts": {
-    "test": "make test-cov"
+    "test": "make test"
   },
   "licenses": [
     {
