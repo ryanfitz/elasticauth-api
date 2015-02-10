@@ -2,11 +2,10 @@
 
 // Load modules
 
-var Code = require('code');
-var Hapi = require('hapi');
-var Lab = require('lab');
-var bunyan = require('bunyan');
-
+var Code = require('code'),
+    Hapi = require('hapi'),
+    Lab = require('lab'),
+    helper = require('./test-helper');
 
 // Declare internals
 
@@ -26,8 +25,12 @@ describe('elasticauth-api', function () {
   it('should not return error', function (done) {
 
     var server = new Hapi.Server();
-    server.register(plugin, function (err) {
+    server.connection({ host: 'localhost', port: 8080 });
 
+    server.register( {
+      register : plugin,
+      options : { key : '123456'}
+    }, function (err) {
       expect(err).to.not.exist();
 
       return done();
@@ -37,9 +40,11 @@ describe('elasticauth-api', function () {
   it('should create child logger', function (done) {
 
     var server = new Hapi.Server();
+    server.connection({ host: 'localhost', port: 8080 });
 
     var options = {
-      log : bunyan.createLogger({name: 'plugin-test', level : 'fatal'})
+      log : helper.testLogger(),
+      key : '123456'
     };
 
     server.register( {
