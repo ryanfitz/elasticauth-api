@@ -164,13 +164,13 @@ describe('Account Manager', { timeout: 10000 }, function () {
   });
 
   describe('#find', function () {
-    var accountId;
+    var account;
 
     before(function (done) {
       var d = {email : helper.randomEmail(), username : helper.randomUsername()};
       manager.create(d, function (err, acc) {
         expect(err).to.not.exist();
-        accountId = acc.id;
+        account = acc;
 
         return done();
       });
@@ -179,7 +179,7 @@ describe('Account Manager', { timeout: 10000 }, function () {
 
     it('should return single account with id', function (done) {
 
-      manager.find({id : accountId}, function (err, accounts) {
+      manager.find({id : account.id}, function (err, accounts) {
         expect(err).to.not.exist();
         expect(accounts).to.have.length(1);
 
@@ -190,12 +190,11 @@ describe('Account Manager', { timeout: 10000 }, function () {
 
         return done();
       });
-
     });
 
     it('should return account with all attributes', function (done) {
 
-      manager.find({id : accountId}, {allFields : true}, function (err, accounts) {
+      manager.find({id : account.id}, {allFields : true}, function (err, accounts) {
         expect(err).to.not.exist();
         expect(accounts).to.have.length(1);
 
@@ -221,7 +220,60 @@ describe('Account Manager', { timeout: 10000 }, function () {
 
     });
 
+    it('should return single account with email address', function (done) {
 
+      manager.find({email : account.email}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.be.a.string();
+        expect(acc.username).to.be.a.string();
+        expect(acc.email).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return account matching email address with all fields', function (done) {
+
+      manager.find({email : account.email}, {allFields : true}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.be.a.string();
+        expect(acc.username).to.be.a.string();
+        expect(acc.email).to.equal(account.email);
+
+        return done();
+      });
+    });
+
+    it('should return single account with username', function (done) {
+
+      manager.find({username : account.username}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.be.a.string();
+        expect(acc.username).to.equal(account.username);
+        expect(acc.email).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return empty array when finding by unknown param', function (done) {
+
+      manager.find({nickname : account.username}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.be.empty();
+
+        return done();
+      });
+    });
   });
 
 });

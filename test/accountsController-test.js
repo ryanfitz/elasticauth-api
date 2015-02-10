@@ -154,40 +154,76 @@ describe('Accounts Controller', function () {
   });
 
   describe('GET /accounts', function () {
-    var accountId,
+    var account,
         token;
 
     before(function (done) {
-      var data = {
-        email : helper.randomEmail(),
-        username : helper.randomUsername()
-      };
+      server.methods.createAccount(function (err, data) {
+        expect(err).to.not.exist();
+        expect(data).to.exist();
 
-      var request = { method: 'POST', url: '/accounts', payload : data};
-
-      server.inject(request, function (res) {
-        expect(res.statusCode).to.equal(201);
-        var account = _.first(res.result.accounts);
-
-        token = _.first(res.result.linked.tokens);
-
-        expect(account).to.exist();
-        expect(token).to.exist();
-        accountId = account.id;
+        token = data.token;
+        account = data.account;
 
         return done();
       });
     });
 
-    //it('should return account matching email address', function (done) {
-      //var request = { method: 'GET', url: '/accounts/' + accountId};
+    it('should return account matching email address', function (done) {
+      var request = { method: 'GET', url: '/accounts?email=' + account.email};
 
-      //server.inject(request, function (res) {
-        //expect(res.statusCode).to.equal(200);
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res.result.accounts).to.have.length(1);
 
-        //return done();
-      //});
-    //});
+        return done();
+      });
+    });
+
+    it('should return account matching username', function (done) {
+      var request = { method: 'GET', url: '/accounts?username=' + account.username};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res.result.accounts).to.have.length(1);
+
+        return done();
+      });
+    });
+
+    it('should return 404 when no matching email exists', function (done) {
+      var request = { method: 'GET', url: '/accounts?email=test123@test.com'};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(404);
+        expect(res.result.accounts).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return 404 when no matching username exists', function (done) {
+      var request = { method: 'GET', url: '/accounts?username=utest'};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(404);
+        expect(res.result.accounts).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return 400 bad request when passing both username and email', function (done) {
+      var request = { method: 'GET', url: '/accounts?username=' + account.username + '&email=' + account.email};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(400);
+        expect(res.result.accounts).to.not.exist();
+
+        return done();
+      });
+    });
+
   });
 
 });
