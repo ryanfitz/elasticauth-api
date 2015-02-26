@@ -44,6 +44,7 @@ describe('tokens', function () {
         expect(err).to.not.exist();
         expect(result).to.be.an.object();
 
+        expect(result.accountID).to.equal('123456');
         expect(result.accessToken).to.be.an.string();
         expect(result.refreshToken).to.be.an.string();
         expect(result.type).to.equal('Bearer');
