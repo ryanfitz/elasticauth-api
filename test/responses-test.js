@@ -34,6 +34,7 @@ describe('tokens', function () {
       var expires = Date.now() + 60000;
 
       var token = {
+        accountID : '123456',
         accessToken : 'access1234',
         refreshToken : 'refresh9876',
         type : 'Bearer',
@@ -50,11 +51,19 @@ describe('tokens', function () {
           access: 'access1234',
           expires: expires,
           type: 'Bearer',
-          refresh: 'refresh9876'
+          refresh: 'refresh9876',
+          links : {
+            self : 'http://test.com/tokens',
+            account : {
+              id : '123456',
+              href : 'http://test.com/accounts/123456',
+              type : 'account'
+            }
+          }
         }]
       };
 
-      expect(expected).to.deep.equal(resp);
+      expect(resp).to.deep.equal(expected);
       return done();
     });
 
@@ -62,6 +71,7 @@ describe('tokens', function () {
       var expires = Date.now() + 60000;
 
       var t1 = {
+        accountID : '123456',
         accessToken : 'access1234',
         refreshToken : 'refresh9876',
         type : 'Bearer',
@@ -69,6 +79,7 @@ describe('tokens', function () {
       };
 
       var t2 = {
+        accountID : '987',
         accessToken : 'anotherAccess',
         refreshToken : 'anotherRefresh',
         type : 'Bearer',
@@ -85,17 +96,33 @@ describe('tokens', function () {
           access: 'access1234',
           expires: expires,
           type: 'Bearer',
-          refresh: 'refresh9876'
+          refresh: 'refresh9876',
+          links : {
+            self : 'http://test.com/tokens',
+            account : {
+              id : '123456',
+              href : 'http://test.com/accounts/123456',
+              type : 'account'
+            }
+          }
         }, {
           href: 'http://test.com/tokens',
           access: 'anotherAccess',
           expires: expires,
           type: 'Bearer',
-          refresh: 'anotherRefresh'
+          refresh: 'anotherRefresh',
+          links : {
+            self : 'http://test.com/tokens',
+            account : {
+              id : '987',
+              href : 'http://test.com/accounts/987',
+              type : 'account'
+            }
+          }
         }]
       };
 
-      expect(expected).to.deep.equal(resp);
+      expect(resp).to.deep.equal(expected);
       return done();
     });
 
@@ -104,6 +131,7 @@ describe('tokens', function () {
       var created = new Date();
 
       var token = {
+        accountID : '12345',
         accessToken : 'access1234',
         refreshToken : 'refresh9876',
         type : 'Bearer',
@@ -131,7 +159,15 @@ describe('tokens', function () {
           access: 'access1234',
           expires: expires,
           type: 'Bearer',
-          refresh: 'refresh9876'
+          refresh: 'refresh9876',
+          links : {
+            self : 'http://test.com/tokens',
+            account : {
+              id : '12345',
+              href : 'http://test.com/accounts/12345',
+              type : 'account'
+            }
+          }
         }],
         linked : {
           accounts : [{
@@ -144,7 +180,7 @@ describe('tokens', function () {
         }
       };
 
-      expect(expected).to.deep.equal(resp);
+      expect(resp).to.deep.equal(expected);
       return done();
     });
 
@@ -265,6 +301,7 @@ describe('tokens', function () {
       };
 
       var token = {
+        accountID : account.id,
         accessToken : 'access1234',
         refreshToken : 'refresh9876',
         type : 'Bearer',
@@ -284,8 +321,8 @@ describe('tokens', function () {
         accounts: [{
           id : '12345',
           href: 'http://test.com/accounts/12345',
-          username : 'testdude',
           email : 'test@test.com',
+          username : 'testdude',
           createdAt : created.toISOString()
         }],
         linked : {
@@ -294,12 +331,20 @@ describe('tokens', function () {
             access: 'access1234',
             expires: expires,
             type: 'Bearer',
-            refresh: 'refresh9876'
+            refresh: 'refresh9876',
+            links : {
+              self : 'http://test.com/tokens',
+              account : {
+                id : '12345',
+                href : 'http://test.com/accounts/12345',
+                type : 'account'
+              }
+            }
           }]
         }
       };
 
-      expect(expected).to.deep.equal(resp);
+      expect(resp).to.deep.equal(expected);
       return done();
     });
 
