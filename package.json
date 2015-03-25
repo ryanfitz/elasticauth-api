@@ -22,7 +22,7 @@
     "hapi-auth-jwt": "2.x.x",
     "hoek": "2.x.x",
     "joi": "5.x.x",
-    "jsonwebtoken": "3.x.x",
+    "jsonwebtoken": "4.x.x",
     "lodash": "3.x.x",
     "omit-empty": "^0.3.0",
     "uuid": "2.x.x",
