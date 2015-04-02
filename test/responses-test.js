@@ -175,7 +175,10 @@ describe('tokens', function () {
             href: 'http://test.com/accounts/12345',
             username : 'testdude',
             email : 'test@test.com',
-            createdAt : created.toISOString()
+            createdAt : created.toISOString(),
+            links : {
+              self : 'http://test.com/accounts/12345'
+            }
           }]
         }
       };
@@ -208,7 +211,10 @@ describe('tokens', function () {
           href: 'http://test.com/accounts/12345',
           username : 'testdude',
           email : 'test@test.com',
-          createdAt : created.toISOString()
+          createdAt : created.toISOString(),
+          links : {
+            self: 'http://test.com/accounts/12345'
+          }
         }]
       };
 
@@ -239,7 +245,10 @@ describe('tokens', function () {
           username : 'testdude',
           email : 'test@test.com',
           createdAt : created.toISOString(),
-          updatedAt : updated.toISOString()
+          updatedAt : updated.toISOString(),
+          links : {
+            self : 'http://test.com/accounts/12345'
+          }
         }]
       };
 
@@ -275,13 +284,19 @@ describe('tokens', function () {
           href: 'http://test.com/accounts/12345',
           username : 'testdude',
           email : 'test@test.com',
-          createdAt : c1.toISOString()
+          createdAt : c1.toISOString(),
+          links : {
+            self : 'http://test.com/accounts/12345'
+          }
         }, {
           id : '9876',
           href: 'http://test.com/accounts/9876',
           username : 'anotherdude',
           email : 'test2@test.com',
-          createdAt : c2.toISOString()
+          createdAt : c2.toISOString(),
+          links : {
+            self : 'http://test.com/accounts/9876'
+          }
         }]
       };
 
@@ -323,7 +338,10 @@ describe('tokens', function () {
           href: 'http://test.com/accounts/12345',
           email : 'test@test.com',
           username : 'testdude',
-          createdAt : created.toISOString()
+          createdAt : created.toISOString(),
+          links : {
+            self : 'http://test.com/accounts/12345'
+          }
         }],
         linked : {
           tokens : [{
@@ -348,6 +366,44 @@ describe('tokens', function () {
       return done();
     });
 
+  it('should return account with links template', function (done) {
+      var baseURL = 'http://test.com';
+      var accountLinks = {
+        followers: 'http://test.com/accounts/${ account.id }/followers'
+      };
+
+      var responsesWithLinks = jsonResponses(baseURL, {accountLinks : accountLinks});
+
+      var created = new Date();
+
+      var account = {
+        id : '12345',
+        username : 'testdude',
+        email : 'test@test.com',
+        createdAt : created,
+      };
+
+      var currentPath = url.parse('http://test.com/accounts');
+      var resp = responsesWithLinks.accountsResponse(account, null, currentPath);
+
+      var expected = {
+        links: { self: 'http://test.com/accounts' },
+        accounts: [{
+          id : '12345',
+          href: 'http://test.com/accounts/12345',
+          username : 'testdude',
+          email : 'test@test.com',
+          createdAt : created.toISOString(),
+          links : {
+            self: 'http://test.com/accounts/12345',
+            followers: 'http://test.com/accounts/12345/followers'
+          }
+        }]
+      };
+
+      expect(expected).to.deep.equal(resp);
+      return done();
+    });
   });
 
 });

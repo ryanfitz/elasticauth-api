@@ -1,7 +1,7 @@
 {
   "name": "elasticauth-api",
   "description": "Elastic Auth Api",
-  "version": "1.0.0-rc3",
+  "version": "1.0.0-rc4",
   "repository": "git://github.com/ryanfitz/elasticauth-api",
   "main": "index",
   "keywords": [
@@ -26,7 +26,7 @@
     "lodash": "3.x.x",
     "omit-empty": "^0.3.0",
     "uuid": "2.x.x",
-    "vogels": "2.0.0-rc8"
+    "vogels": "2.0.0-rc9"
   },
   "peerDependencies": {
     "hapi": ">=8.x.x"
