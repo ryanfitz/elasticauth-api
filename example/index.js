@@ -22,6 +22,7 @@ server.register( {
   register : elasticApi,
   options : {
     key : 'BbZijuoXAdr85UzyijKARZimKfrSmQ6fv8kZ7OFfc',
+    facebookAppSecret : process.env.FACEBOOK_APP_SECRET,
     log : log
   }
 }, function (err) {

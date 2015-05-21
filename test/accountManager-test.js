@@ -167,7 +167,7 @@ describe('Account Manager', { timeout: 10000 }, function () {
     var account;
 
     before(function (done) {
-      var d = {email : helper.randomEmail(), username : helper.randomUsername()};
+      var d = {email : helper.randomEmail(), username : helper.randomUsername(), facebookId : helper.randomFacebookId()};
       manager.create(d, function (err, acc) {
         expect(err).to.not.exist();
         account = acc;
@@ -274,6 +274,23 @@ describe('Account Manager', { timeout: 10000 }, function () {
         return done();
       });
     });
+
+    it('should return single account with facebook id', function (done) {
+
+      manager.find({facebookId : account.facebookId}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.be.a.string();
+        expect(acc.username).to.be.a.string();
+        expect(acc.email).to.not.exist();
+
+        return done();
+      });
+    });
+
+
   });
 
 });
