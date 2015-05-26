@@ -26,6 +26,14 @@ exports.randomUsername = function () {
   return cryptiles.randomString(12);
 };
 
+exports.randomFacebookAccessToken = function () {
+  return cryptiles.randomString(256);
+};
+
+exports.randomFacebookId = function () {
+  return String(_.random(1000000000000000, 9999999999999999));
+};
+
 exports.authHeader = function (token, type) {
   var t = token.access;
   if(type === 'refresh') {

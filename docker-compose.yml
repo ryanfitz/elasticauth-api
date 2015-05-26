@@ -13,6 +13,7 @@ server:
     AWS_SECRET_ACCESS_KEY: SECRET
     AWS_REGION: us-east-1
     DYNAMODB_ENDPOINT: http://dynamodb-local:8000
+    FACEBOOK_APP_SECRET : 2895e93977f23010fdfg428f043791v0
 db:
   image: fitz/dynamodb-local
   command: -inMemory
