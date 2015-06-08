@@ -192,6 +192,31 @@ describe('Account Manager', { timeout: 10000 }, function () {
       });
     });
 
+    it('should return two accounts with ids', function (done) {
+
+      manager.find({ids : [account.id]}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.be.a.string();
+        expect(acc.username).to.be.a.string();
+        expect(acc.email).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return empty set when not accounts match ids', function (done) {
+
+      manager.find({ids : ['123', '555']}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.be.empty();
+
+        return done();
+      });
+    });
+
     it('should return account with all attributes', function (done) {
 
       manager.find({id : account.id}, {allFields : true}, function (err, accounts) {

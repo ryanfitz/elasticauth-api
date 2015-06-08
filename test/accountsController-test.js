@@ -191,6 +191,17 @@ describe('Accounts Controller', function () {
       });
     });
 
+    it('should return account matching ids', function (done) {
+      var request = { method: 'GET', url: '/accounts?ids=' + account.id};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res.result.accounts).to.have.length(1);
+
+        return done();
+      });
+    });
+
     it('should return 404 when no matching email exists', function (done) {
       var request = { method: 'GET', url: '/accounts?email=test123@test.com'};
 
