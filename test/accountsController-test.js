@@ -5,6 +5,7 @@
 var Code   = require('code'),
     Lab    = require('lab'),
     _      = require('lodash'),
+    uuid   = require('uuid'),
     helper = require('./test-helper');
 
 // Declare internals
@@ -73,6 +74,30 @@ describe('Accounts Controller', function () {
         return done();
       });
     });
+
+    it('should return created account with passed in id', function (done) {
+      var accountId = uuid.v4();
+
+      var data = {
+        id : accountId,
+        email : helper.randomEmail(),
+        username : helper.randomUsername()
+      };
+
+      var request = { method: 'POST', url: '/accounts', payload : data};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(201);
+        expect(res.result.accounts).to.have.length(1);
+
+        var account = _.first(res.result.accounts);
+
+        expect(account.id).to.equal(accountId);
+
+        return done();
+      });
+    });
+
   });
 
   describe('GET /accounts/{id}', function () {
