@@ -99,6 +99,7 @@ describe('Account Manager', { timeout: 10000 }, function () {
 
         manager.create(accData, function (err, acc) {
           expect(err).to.exist();
+          expect(err.message).to.equal('Account with id ' + accountId + ' already exists');
           expect(acc).to.not.exist();
 
           return done();
