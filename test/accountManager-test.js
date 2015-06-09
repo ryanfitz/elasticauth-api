@@ -5,6 +5,7 @@
 var Code             = require('code'),
     Lab              = require('lab'),
     _                = require('lodash'),
+    uuid             = require('uuid'),
     vogels           = require('vogels'),
     helper           = require('./test-helper'),
     Account          = require('../lib/models/account'),
@@ -57,6 +58,53 @@ describe('Account Manager', { timeout: 10000 }, function () {
         return done();
       });
 
+    });
+
+    it('should create new account with provided id', function (done) {
+      var accountId = uuid.v4();
+
+      var data = {
+        id : accountId,
+        email : helper.randomEmail(),
+        username : helper.randomUsername()
+      };
+
+      manager.create(data, function (err, acc) {
+        expect(err).to.not.exist();
+        expect(acc).to.exist();
+        expect(acc.id).to.equal(accountId);
+
+        return done();
+      });
+    });
+
+    it('should return error when creating account with an existing id', function (done) {
+      var accountId = uuid.v4();
+
+      var data = {
+        id : accountId,
+        email : helper.randomEmail(),
+        username : helper.randomUsername()
+      };
+
+      manager.create(data, function (err, acc) {
+        expect(err).to.not.exist();
+        expect(acc).to.exist();
+
+        var accData = {
+          id : accountId,
+          email : helper.randomEmail(),
+          username : helper.randomUsername()
+        };
+
+        manager.create(accData, function (err, acc) {
+          expect(err).to.exist();
+          expect(acc).to.not.exist();
+
+          return done();
+        });
+
+      });
     });
 
     it('should return error when email is taken', function (done) {
