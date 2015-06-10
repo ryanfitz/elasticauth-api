@@ -222,6 +222,39 @@ describe('tokens', function () {
       return done();
     });
 
+    it('should return single account with metadata', function (done) {
+      var created = new Date();
+
+      var account = {
+        id : '12345',
+        username : 'testdude',
+        email : 'test@test.com',
+        metadata : { foo : 'bar'},
+        createdAt : created,
+      };
+
+      var currentPath = url.parse('http://test.com/accounts');
+      var resp = responses.accountsResponse(account, null, currentPath);
+
+      var expected = {
+        links: { self: 'http://test.com/accounts' },
+        accounts: [{
+          id : '12345',
+          href: 'http://test.com/accounts/12345',
+          username : 'testdude',
+          email : 'test@test.com',
+          metadata : { foo : 'bar'},
+          createdAt : created.toISOString(),
+          links : {
+            self: 'http://test.com/accounts/12345'
+          }
+        }]
+      };
+
+      expect(expected).to.deep.equal(resp);
+      return done();
+    });
+
     it('should return account with updated timestamp attribute', function (done) {
       var created = new Date(2015, 1, 1);
       var updated = new Date();
