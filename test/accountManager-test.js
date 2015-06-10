@@ -176,6 +176,25 @@ describe('Account Manager', { timeout: 10000 }, function () {
       });
     });
 
+    it('should create new account with metadata', function (done) {
+      var data = {
+        email : helper.randomEmail(),
+        username : helper.randomUsername(),
+        metadata : {
+          profilePicture : { small : 'https://www.google.com/images/srpr/logo11w.png' }
+        }
+      };
+
+      manager.create(data, function (err, acc) {
+        expect(err).to.not.exist();
+        expect(acc).to.exist();
+        expect(acc.metadata.profilePicture).to.exist();
+
+        return done();
+      });
+
+    });
+
   });
 
   describe('#remove', function () {
@@ -216,7 +235,18 @@ describe('Account Manager', { timeout: 10000 }, function () {
     var account;
 
     before(function (done) {
-      var d = {email : helper.randomEmail(), username : helper.randomUsername(), facebookId : helper.randomFacebookId()};
+      var metadata = { profilePicture : {
+        small : 'http://test.com/small.jpg',
+        large : 'http://test.com/large.jpg'
+      }};
+
+      var d = {
+        email : helper.randomEmail(),
+        username : helper.randomUsername(),
+        facebookId : helper.randomFacebookId(),
+        metadata : metadata
+      };
+
       manager.create(d, function (err, acc) {
         expect(err).to.not.exist();
         account = acc;
@@ -236,6 +266,7 @@ describe('Account Manager', { timeout: 10000 }, function () {
         expect(acc.id).to.be.a.string();
         expect(acc.username).to.be.a.string();
         expect(acc.email).to.not.exist();
+        expect(acc.metadata).to.a.object();
 
         return done();
       });

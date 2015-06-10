@@ -59,6 +59,26 @@ describe('Accounts Controller', function () {
       });
     });
 
+    it('should return created account with metadata', function (done) {
+      var data = {
+        email : helper.randomEmail(),
+        username : helper.randomUsername(),
+        metadata : { foo : 'bar' }
+      };
+
+      var request = { method: 'POST', url: '/accounts', payload : data};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(201);
+        expect(res.result.accounts).to.have.length(1);
+
+        var account = _.first(res.result.accounts);
+        expect(account.metadata).to.be.a.object();
+
+        return done();
+      });
+    });
+
     it('should return linked token', function (done) {
       var data = {
         email : helper.randomEmail(),
