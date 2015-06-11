@@ -23,7 +23,11 @@ server.register( {
   options : {
     key : 'BbZijuoXAdr85UzyijKARZimKfrSmQ6fv8kZ7OFfc',
     facebookAppSecret : process.env.FACEBOOK_APP_SECRET,
-    log : log
+    log : log,
+    cognito : {
+      identityPoolId : process.env.COGNITO_IDENTITY_POOL_ID,
+      developerProviderName : process.env.COGNITO_DEVELOPER_PROVIDER_NAME
+    }
   }
 }, function (err) {
   if(err) {
