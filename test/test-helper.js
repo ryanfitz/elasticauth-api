@@ -82,3 +82,13 @@ exports.testApiServer = function (callback) {
   return server;
 };
 
+exports.mockCognitoClient = function () {
+  return {
+    createToken : function (account, callback) {
+      return callback(null, {
+        cognitoId : 'us-east-1:5c2c6676-ce64-477d-a949-b3644ab472f3',
+        cognitoToken : 'eyJraWQiOiJ1cy1lYXN0LTExIiwidHlwIjoiSldTIiwiYWxnIjoiUlM1MTIifQ'
+      });
+    },
+  };
+};

@@ -24,7 +24,7 @@ describe('tokens', function () {
 
   before(function (done) {
     var privateKey = '8138sdfhj1h12hjjsd1';
-    token = tokenModel(privateKey);
+    token = tokenModel(privateKey, helper.mockCognitoClient());
     return done();
   });
 
