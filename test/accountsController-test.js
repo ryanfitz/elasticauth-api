@@ -282,4 +282,51 @@ describe('Accounts Controller', function () {
 
   });
 
+  describe('PUT /accounts/ID', function () {
+    var account,
+        token;
+
+    before(function (done) {
+      server.methods.createAccount(function (err, data) {
+        expect(err).to.not.exist();
+        expect(data).to.exist();
+
+        token = data.token;
+        account = data.account;
+
+        return done();
+      });
+    });
+
+    it('should update account name', function (done) {
+      var data = {
+        name : 'Foo Update'
+      };
+
+      var request = { method: 'PUT', url: '/accounts/' + account.id, payload : data};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res.result.accounts).to.have.length(1);
+
+        return done();
+      });
+    });
+
+    it('should return 404 not found', function (done) {
+      var data = {
+        name : 'Foo Update'
+      };
+
+      var request = { method: 'PUT', url: '/accounts/81812939123', payload : data};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(404);
+        expect(res.result.accounts).to.not.exist();
+
+        return done();
+      });
+    });
+
+  });
 });
