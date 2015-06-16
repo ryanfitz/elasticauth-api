@@ -398,4 +398,83 @@ describe('Account Manager', { timeout: 10000 }, function () {
 
   });
 
+  describe('#update', function () {
+    var account;
+
+    before(function (done) {
+      var metadata = { profilePicture : {
+        small : 'http://test.com/small.jpg',
+        large : 'http://test.com/large.jpg'
+      }};
+
+      var d = {
+        name : 'Tim Tester',
+        email : helper.randomEmail(),
+        username : helper.randomUsername(),
+        facebookId : helper.randomFacebookId(),
+        metadata : metadata
+      };
+
+      manager.create(d, function (err, acc) {
+        expect(err).to.not.exist();
+        account = acc;
+
+        return done();
+      });
+    });
+
+    it('should update name', function (done) {
+
+      manager.update({id : account.id, name : 'Tim Updater'}, function (err, account) {
+        expect(err).to.not.exist();
+        expect(account).to.exist();
+
+        expect(account.name).to.equal('Tim Updater');
+        expect(account.id).to.be.a.string();
+        expect(account.username).to.be.a.string();
+        expect(account.email).to.be.a.string();
+        expect(account.metadata).to.a.object();
+
+        return done();
+      });
+    });
+
+    it('should return not found error when account does not already exist', function (done) {
+
+      manager.update({id : '1234881828hdhdh', name : 'Tim Updater'}, function (err, account) {
+        expect(err).to.exist();
+        expect(err.message).to.exist();
+        expect(err.output.statusCode).to.equal(404);
+        expect(account).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should update nested metadata', function (done) {
+      var meta = { website : 'http://www.google.com'};
+
+      manager.update({id : account.id, metadata : meta }, function (err, account) {
+        expect(err).to.not.exist();
+        expect(account).to.exist();
+
+        expect(account.id).to.equal(account.id);
+        expect(account.name).to.equal(account.name);
+        expect(account.username).to.equal(account.username);
+        expect(account.email).to.equal(account.email);
+        expect(account.metadata).to.deep.equal({
+          profilePicture : {
+            small : 'http://test.com/small.jpg',
+            large : 'http://test.com/large.jpg'
+          },
+          website : 'http://www.google.com'
+        });
+
+        return done();
+      });
+    });
+
+
+  });
+
 });
