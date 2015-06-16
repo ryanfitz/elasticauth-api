@@ -452,7 +452,7 @@ describe('Account Manager', { timeout: 10000 }, function () {
     });
 
     it('should update nested metadata', function (done) {
-      var meta = { website : 'http://www.google.com'};
+      var meta = { website : 'http://www.google.com', bio : 'words words', foobar : ''};
 
       manager.update({id : account.id, metadata : meta }, function (err, account) {
         expect(err).to.not.exist();
@@ -467,7 +467,9 @@ describe('Account Manager', { timeout: 10000 }, function () {
             small : 'http://test.com/small.jpg',
             large : 'http://test.com/large.jpg'
           },
-          website : 'http://www.google.com'
+          website : 'http://www.google.com',
+          bio : 'words words',
+          foobar : null
         });
 
         return done();
