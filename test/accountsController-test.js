@@ -303,7 +303,8 @@ describe('Accounts Controller', function () {
         name : 'Foo Update'
       };
 
-      var request = { method: 'PUT', url: '/accounts/' + account.id, payload : data};
+
+      var request = { method: 'PUT', url: '/accounts/' + account.id, payload : data, headers : helper.authHeader(token) };
 
       server.inject(request, function (res) {
         expect(res.statusCode).to.equal(200);
@@ -313,20 +314,33 @@ describe('Accounts Controller', function () {
       });
     });
 
-    it('should return 404 not found', function (done) {
-      var data = {
-        name : 'Foo Update'
-      };
-
-      var request = { method: 'PUT', url: '/accounts/81812939123', payload : data};
+    it('should return 401 when no auth header is present', function (done) {
+      var request = { method: 'PUT', url: '/accounts/' + account.id, payload : { name : 'Foo' }};
 
       server.inject(request, function (res) {
-        expect(res.statusCode).to.equal(404);
+        expect(res.statusCode).to.equal(401);
         expect(res.result.accounts).to.not.exist();
 
         return done();
       });
     });
+
+    it('should return 403', function (done) {
+      var data = {
+        name : 'Foo Update'
+      };
+
+
+      var request = { method: 'PUT', url: '/accounts/571293', payload : data, headers : helper.authHeader(token) };
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(403);
+        expect(res.result.accounts).to.not.exist();
+
+        return done();
+      });
+    });
+
 
   });
 });
