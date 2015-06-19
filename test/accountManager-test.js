@@ -370,6 +370,35 @@ describe('Account Manager', { timeout: 10000 }, function () {
       });
     });
 
+    it('should return account with different case email', function (done) {
+
+      manager.find({email : account.email.toUpperCase()}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.equal(account.id);
+        expect(acc.username).to.equal(account.username);
+
+        return done();
+      });
+    });
+
+    it('should return account with different case username', function (done) {
+
+      manager.find({username : account.username.toUpperCase()}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.equal(account.id);
+        expect(acc.username).to.equal(account.username);
+
+        return done();
+      });
+    });
+
+
     it('should return empty array when finding by unknown param', function (done) {
 
       manager.find({nickname : account.username}, function (err, accounts) {
