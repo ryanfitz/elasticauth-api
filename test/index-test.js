@@ -29,7 +29,7 @@ describe('elasticauth-api', function () {
 
     server.register( {
       register : plugin,
-      options : { key : '123456'}
+      options : { key : '123456', mailer : helper.testMailerSettings()}
     }, function (err) {
       expect(err).to.not.exist();
 
@@ -44,7 +44,8 @@ describe('elasticauth-api', function () {
 
     var options = {
       log : helper.testLogger(),
-      key : '123456'
+      key : '123456',
+      mailer : helper.testMailerSettings()
     };
 
     server.register( {

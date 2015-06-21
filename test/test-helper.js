@@ -34,6 +34,15 @@ exports.randomFacebookId = function () {
   return String(_.random(1000000000000000, 9999999999999999));
 };
 
+exports.testMailerSettings = function () {
+  return {
+    fromAddress : 'test@test.com',
+    subject : 'Test app Login',
+    loginUrl : 'http://127.0.0.1/login?token=${auth.accessToken}',
+    transport : 'stub'
+  };
+};
+
 exports.authHeader = function (token, type) {
   var t = token.access;
   if(type === 'refresh') {
@@ -53,7 +62,13 @@ exports.testApiServer = function (callback) {
 
   var options = {
     log : exports.testLogger(),
-    key : 'BbZijuoXAdr85UzyijKARZimKfrSmQ6fv8kZ7OFfc'
+    key : 'BbZijuoXAdr85UzyijKARZimKfrSmQ6fv8kZ7OFfc',
+    mailer : {
+      fromAddress : 'test@test.com',
+      subject : 'Test app Login',
+      loginUrl : 'http://127.0.0.1/login?token=${auth.accessToken}',
+      transport : 'stub'
+    }
   };
 
   server.method('createAccount', function (next) {

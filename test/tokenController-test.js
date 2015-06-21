@@ -119,6 +119,59 @@ describe('Token Controller', function () {
 
       });
     });
-  });
 
+    it('should return 201 created when sending login email', function (done) {
+
+      server.methods.createAccount(function (err, data) {
+        var payload = {
+          email : data.account.email
+        };
+
+        var request = { method: 'POST', url: '/tokens', payload : payload };
+
+        server.inject(request, function (res) {
+          expect(res.statusCode).to.equal(201);
+          expect(res.result).to.equal('OK');
+
+          return done();
+        });
+
+      });
+    });
+
+    it('should return 201 created when sending login email by username', function (done) {
+
+      server.methods.createAccount(function (err, data) {
+        var payload = {
+          email : data.account.username
+        };
+
+        var request = { method: 'POST', url: '/tokens', payload : payload };
+
+        server.inject(request, function (res) {
+          expect(res.statusCode).to.equal(201);
+          expect(res.result).to.equal('OK');
+
+          return done();
+        });
+      });
+    });
+
+    it('should return 404 not found when attempting to send login email', function (done) {
+
+      var payload = {
+        email : 'dontexist@test.com'
+      };
+
+      var request = { method: 'post', url: '/tokens', payload : payload };
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(404);
+        expect(res.result.message).to.equal('Account not found');
+
+        return done();
+      });
+    });
+
+  });
 });
