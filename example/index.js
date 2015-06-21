@@ -27,6 +27,12 @@ server.register( {
     cognito : {
       identityPoolId : process.env.COGNITO_IDENTITY_POOL_ID,
       developerProviderName : process.env.COGNITO_DEVELOPER_PROVIDER_NAME
+    },
+    mailer : {
+      fromAddress : 'login@example.com',
+      subject : 'Example app Login',
+      loginUrl : 'http://127.0.0.1/login?token=${auth.accessToken}',
+      transport : 'stub'
     }
   }
 }, function (err) {
