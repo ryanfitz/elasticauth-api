@@ -131,7 +131,7 @@ describe('Token Controller', function () {
 
         server.inject(request, function (res) {
           expect(res.statusCode).to.equal(201);
-          expect(res.result).to.equal('OK');
+          expect(res.result.message).to.equal('OK');
 
           return done();
         });
@@ -150,7 +150,7 @@ describe('Token Controller', function () {
 
         server.inject(request, function (res) {
           expect(res.statusCode).to.equal(201);
-          expect(res.result).to.equal('OK');
+          expect(res.result.message).to.equal('OK');
 
           return done();
         });
