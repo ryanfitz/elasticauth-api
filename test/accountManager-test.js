@@ -505,7 +505,78 @@ describe('Account Manager', { timeout: 10000 }, function () {
       });
     });
 
+  });
 
+  describe('#linkAccountWithProvider', function () {
+    var account;
+
+    before(function (done) {
+      var metadata = { profilePicture : {
+        small : 'http://test.com/small.jpg',
+        large : 'http://test.com/large.jpg'
+      }};
+
+      var d = {
+        name : 'Tim Tester',
+        email : helper.randomEmail(),
+        username : helper.randomUsername(),
+        //facebookId : helper.randomFacebookId(),
+        metadata : metadata
+      };
+
+      manager.create(d, function (err, acc) {
+        expect(err).to.not.exist();
+        account = acc;
+
+        return done();
+      });
+    });
+
+    it('should link account with facebook', function (done) {
+
+      var facebookId = helper.randomFacebookId();
+
+      manager.linkAccountWithProvider(account.id, 'facebook', facebookId, function (err, acc) {
+        expect(err).to.not.exist();
+        expect(acc.facebookId).to.equal(facebookId);
+
+        return done();
+      });
+    });
+
+    it('should be able to link twice', function (done) {
+
+      var facebookId = helper.randomFacebookId();
+
+      manager.linkAccountWithProvider(account.id, 'facebook', facebookId, function (err, acc) {
+        expect(err).to.not.exist();
+        expect(acc.facebookId).to.equal(facebookId);
+
+        manager.linkAccountWithProvider(account.id, 'facebook', facebookId, function (err, acc) {
+          expect(err).to.not.exist();
+          expect(acc.facebookId).to.equal(facebookId);
+
+          return done();
+        });
+      });
+    });
+
+    it('should be able to link account after initial failure', function (done) {
+
+      var facebookId = helper.randomFacebookId();
+
+      manager.linkAccountWithProvider('notrealaccountid', 'facebook', facebookId, function (err, acc) {
+        expect(err).to.exist();
+        expect(acc).to.not.exist();
+
+        manager.linkAccountWithProvider(account.id, 'facebook', facebookId, function (err, acc) {
+          expect(err).to.not.exist();
+          expect(acc.facebookId).to.equal(facebookId);
+
+          return done();
+        });
+      });
+    });
   });
 
 });
