@@ -428,7 +428,8 @@ describe('Account Manager', { timeout: 10000 }, function () {
   });
 
   describe('#update', function () {
-    var account;
+    var account,
+        secondAccount;
 
     before(function (done) {
       var metadata = { profilePicture : {
@@ -445,10 +446,30 @@ describe('Account Manager', { timeout: 10000 }, function () {
       };
 
       manager.create(d, function (err, acc) {
+        if(err) {
+          return done(err);
+        }
+
         expect(err).to.not.exist();
         account = acc;
 
-        return done();
+        var d2 = {
+          name : 'Second Account',
+          email : helper.randomEmail(),
+          username : helper.randomUsername(),
+          facebookId : helper.randomFacebookId(),
+          metadata : metadata
+        };
+
+        manager.create(d2, function (err, acc) {
+          if(err) {
+            return done(err);
+          }
+
+          secondAccount = acc;
+          return done();
+
+        });
       });
     });
 
@@ -467,6 +488,111 @@ describe('Account Manager', { timeout: 10000 }, function () {
         return done();
       });
     });
+
+    it('should update email address', function (done) {
+
+      var newEmail = helper.randomEmail();
+
+      manager.update({id : account.id, email : newEmail}, function (err, account) {
+        expect(err).to.not.exist();
+        expect(account).to.exist();
+
+        expect(account.email).to.equal(newEmail);
+        expect(account.id).to.be.a.string();
+        expect(account.username).to.be.a.string();
+        expect(account.metadata).to.a.object();
+
+        return done();
+      });
+    });
+
+    it('should update email address back to original', function (done) {
+
+      var newEmail = helper.randomEmail();
+      var originalEmail = account.email;
+
+      manager.update({id : account.id, email : newEmail}, function (err, acc) {
+        expect(err).to.not.exist();
+        expect(acc.email).to.equal(newEmail);
+
+
+        manager.update({id : account.id, email : originalEmail}, function (err, acc) {
+          expect(err).to.not.exist();
+          expect(acc.email).to.equal(originalEmail);
+
+          return done();
+        });
+
+      });
+    });
+
+    it('should return error when email is taken', function (done) {
+
+      manager.update({id : account.id, email : secondAccount.email}, function (err, acc) {
+        expect(err).to.exist();
+        expect(acc).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should keep email address the same on multiple updates to the same account', function (done) {
+
+      var newEmail = helper.randomEmail();
+
+      manager.update({id : account.id, email : newEmail}, function (err, acc) {
+        expect(err).to.not.exist();
+        expect(acc.email).to.equal(newEmail);
+
+
+        manager.update({id : account.id, email : newEmail}, function (err, acc) {
+          expect(err).to.not.exist();
+          expect(acc.email).to.equal(newEmail);
+
+          return done();
+        });
+
+      });
+    });
+
+
+    it('should update email and username', function (done) {
+
+      var newEmail = helper.randomEmail();
+      var newUsername = helper.randomUsername();
+
+      manager.update({id : account.id, email : newEmail, username : newUsername}, function (err, acc) {
+        expect(err).to.not.exist();
+
+        expect(acc.email).to.equal(newEmail);
+        expect(acc.username).to.equal(newUsername);
+
+        return done();
+      });
+
+    });
+
+    it('should update email and username after initial failure', function (done) {
+
+      var newEmail = secondAccount.email;
+      var newUsername = helper.randomUsername();
+
+      manager.update({id : account.id, email : newEmail, username : newUsername}, function (err, acc) {
+        expect(err).to.exist();
+        expect(acc).to.not.exist();
+
+        newEmail = helper.randomEmail();
+        manager.update({id : account.id, email : newEmail, username : newUsername}, function (err, acc) {
+          expect(err).to.not.exist();
+
+          expect(acc.email).to.equal(newEmail);
+          expect(acc.username).to.equal(newUsername);
+          return done();
+        });
+      });
+
+    });
+
 
     it('should return not found error when account does not already exist', function (done) {
 
