@@ -238,7 +238,47 @@ describe('Token Controller', function () {
       });
     });
 
-    it('should return token for authenticated user when user does not have admin rights', function (done) {
+    it('should return token for own account when provided accountId matches auth accountId', function (done) {
+      var authUser, token;
+
+      var funcs = [
+        function (callback) {
+          return server.methods.createAccount(callback);
+        },
+
+        function (data, callback) {
+          authUser = data.account;
+          token = data.token;
+
+          var payload = {
+            accountId: authUser.id
+          };
+
+          var request = {
+            method: 'post',
+            url: '/tokens?include=account',
+            payload: payload,
+            headers: helper.authHeader(token)
+          };
+
+          server.inject(request, function (res) {
+            return callback(null, res);
+          });
+        }
+      ];
+
+      return async.waterfall(funcs, function (err, res) {
+        expect(res.statusCode).to.equal(201);
+        expect(res.result.tokens).to.have.length(1);
+        expect(res.result.linked).to.exist();
+        expect(res.result.linked.accounts).to.have.length(1);
+        expect(res.result.linked.accounts[0].id).to.equal(authUser.id);
+
+        return done();
+      });
+    });
+
+    it('should return 403 when non-admin user tries to create token for other user', function (done) {
       var authUser, token;
 
       var funcs = [
@@ -272,11 +312,7 @@ describe('Token Controller', function () {
       ];
 
       return async.waterfall(funcs, function (err, res) {
-        expect(res.statusCode).to.equal(201);
-        expect(res.result.tokens).to.have.length(1);
-        expect(res.result.linked).to.exist();
-        expect(res.result.linked.accounts).to.have.length(1);
-        expect(res.result.linked.accounts[0].id).to.equal(authUser.id);
+        expect(res.statusCode).to.equal(403);
 
         return done();
       });
