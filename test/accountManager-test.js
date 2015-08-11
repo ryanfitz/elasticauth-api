@@ -424,6 +424,36 @@ describe('Account Manager', { timeout: 10000 }, function () {
       });
     });
 
+    it('should return account matching email address with specific fields', function (done) {
+
+      manager.find({email : account.email}, {allFields : true, fieldsToGet : 'email'}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.be.a.string();
+        expect(acc.email).to.equal(account.email);
+        expect(acc.username).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return account matching username with only allowed specific fields', function (done) {
+
+      manager.find({username : account.username}, {allFields : false, fieldsToGet : 'email, username'}, function (err, accounts) {
+        expect(err).to.not.exist();
+        expect(accounts).to.have.length(1);
+
+        var acc = _.first(accounts);
+        expect(acc.id).to.be.a.string();
+        expect(acc.username).to.equal(account.username);
+        expect(acc.email).to.not.exist();
+        expect(acc.name).to.not.exist();
+
+        return done();
+      });
+    });
 
   });
 

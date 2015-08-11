@@ -196,6 +196,63 @@ describe('Accounts Controller', function () {
       });
     });
 
+    it('should return account with specific field', function (done) {
+      var request = { method: 'GET', url: '/accounts/' + accountId + '?fields=name'};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res.result.accounts).to.have.length(1);
+
+        var account = _.first(res.result.accounts);
+        expect(account.id).to.be.a.string();
+        expect(account.href).to.be.a.string();
+        expect(account.name).to.be.a.string();
+        expect(account.email).to.not.exist();
+        expect(account.username).to.not.exist();
+        expect(account.metadata).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return account without specific email field', function (done) {
+      var request = { method: 'GET', url: '/accounts/' + accountId + '?fields=name,email'};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res.result.accounts).to.have.length(1);
+
+        var account = _.first(res.result.accounts);
+        expect(account.id).to.be.a.string();
+        expect(account.href).to.be.a.string();
+        expect(account.name).to.be.a.string();
+        expect(account.email).to.not.exist();
+        expect(account.username).to.not.exist();
+        expect(account.metadata).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return account with specific email field', function (done) {
+      var request = { method: 'GET', url: '/accounts/' + accountId + '?fields=name,email', headers : helper.authHeader(token)};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res.result.accounts).to.have.length(1);
+
+        var account = _.first(res.result.accounts);
+        expect(account.id).to.be.a.string();
+        expect(account.href).to.be.a.string();
+        expect(account.name).to.be.a.string();
+        expect(account.email).to.be.a.string();
+        expect(account.username).to.not.exist();
+        expect(account.metadata).to.not.exist();
+
+        return done();
+      });
+    });
+
   });
 
   describe('GET /accounts', function () {
@@ -297,6 +354,43 @@ describe('Accounts Controller', function () {
       server.inject(request, function (res) {
         expect(res.statusCode).to.equal(400);
         expect(res.result.accounts).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return account by id with specific fields', function (done) {
+      var request = { method: 'GET', url: '/accounts?ids=' + account.id + '&fields=name'};
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res.result.accounts).to.have.length(1);
+
+        var acc = _.first(res.result.accounts);
+        expect(acc.id).to.exist();
+        expect(acc.name).to.exist();
+        expect(acc.username).to.not.exist();
+        expect(acc.email).to.not.exist();
+        expect(acc.metadata).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return account matching username with specific fields', function (done) {
+      var request = { method: 'GET', url: '/accounts?username=' + account.username + '&fields=username' };
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res.result.accounts).to.have.length(1);
+
+        var acc = _.first(res.result.accounts);
+        expect(acc.id).to.exist();
+        expect(acc.username).to.exist();
+        expect(acc.name).to.not.exist();
+        expect(acc.email).to.not.exist();
+        expect(acc.metadata).to.not.exist();
+
 
         return done();
       });
