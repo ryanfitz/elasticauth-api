@@ -74,7 +74,8 @@ exports.testApiServer = function (callback) {
   server.method('createAccount', function (next) {
     var data = {
       email : exports.randomEmail(),
-      username : exports.randomUsername()
+      username : exports.randomUsername(),
+      name : exports.randomUsername()
     };
 
     var request = { method: 'POST', url: '/accounts', payload : data};
