@@ -216,7 +216,7 @@ describe('Accounts Controller', function () {
     });
 
     it('should return account without specific email field', function (done) {
-      var request = { method: 'GET', url: '/accounts/' + accountId + '?fields=name,email'};
+      var request = { method: 'GET', url: '/accounts/' + accountId + '?fields=id,name,email'};
 
       server.inject(request, function (res) {
         expect(res.statusCode).to.equal(200);
