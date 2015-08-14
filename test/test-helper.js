@@ -38,7 +38,9 @@ exports.testMailerSettings = function () {
   return {
     fromAddress : 'test@test.com',
     subject : 'Test app Login',
-    loginUrl : 'http://127.0.0.1/login?token=${auth.accessToken}',
+    loginUrls : {
+      default: 'http://127.0.0.1/login?token=${auth.accessToken}'
+    },
     transport : 'stub'
   };
 };
@@ -66,7 +68,9 @@ exports.testApiServer = function (callback) {
     mailer : {
       fromAddress : 'test@test.com',
       subject : 'Test app Login',
-      loginUrl : 'http://127.0.0.1/login?token=${auth.accessToken}',
+      loginUrls : {
+        default: 'http://127.0.0.1/login?token=${auth.accessToken}',
+      },
       transport : 'stub'
     }
   };
