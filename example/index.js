@@ -31,7 +31,9 @@ server.register( {
     mailer : {
       fromAddress : 'login@example.com',
       subject : 'Example app Login',
-      loginUrl : 'http://127.0.0.1/login?token=${auth.accessToken}',
+      loginUrls : {
+        default: 'http://127.0.0.1/login?token=${auth.accessToken}'
+      },
       transport : 'stub'
     }
   }
