@@ -459,4 +459,54 @@ describe('Accounts Controller', function () {
 
 
   });
+
+  describe('DELETE /accounts/ID', function () {
+    var account,
+        token;
+
+    before(function (done) {
+      server.methods.createAccount(function (err, data) {
+        expect(err).to.not.exist();
+        expect(data).to.exist();
+
+        token = data.token;
+        account = data.account;
+
+        return done();
+      });
+    });
+
+    it('should return 401 when no auth header is present', function (done) {
+      var request = { method: 'DELETE', url: '/accounts/' + account.id };
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(401);
+        expect(res.result.accounts).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should return 403', function (done) {
+      var request = { method: 'DELETE', url: '/accounts/571293', headers : helper.authHeader(token) };
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(403);
+        expect(res.result.accounts).to.not.exist();
+
+        return done();
+      });
+    });
+
+    it('should remove account', function (done) {
+      var request = { method: 'DELETE', url: '/accounts/' + account.id, headers : helper.authHeader(token) };
+
+      server.inject(request, function (res) {
+        expect(res.statusCode).to.equal(200);
+        expect(res.result).to.not.exist();
+
+        return done();
+      });
+    });
+  });
 });
